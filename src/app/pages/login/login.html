@@ -1,0 +1,77 @@
+<div class="row justify-content-center align-items-center g-4 py-lg-4">
+  <div class="col-12 col-md-8 col-lg-5 text-center text-lg-start">
+    <app-logo [tamano]="56" [conTexto]="false" />
+    <h1 class="mt-3">¡Qué bueno verte de nuevo!</h1>
+    <p class="texto-suave lead">
+      Inicia sesión para abrir temas, comentar y participar en la comunidad estudiantil.
+    </p>
+    <ul class="list-unstyled texto-suave d-none d-md-block">
+      <li><i class="bi bi-chat-dots me-2"></i>Conversa con gente de otras carreras</li>
+      <li><i class="bi bi-people me-2"></i>Arma equipos, grupos de estudio y panoramas</li>
+      <li><i class="bi bi-shield-check me-2"></i>Un espacio moderado y con normas claras</li>
+    </ul>
+  </div>
+
+  <div class="col-12 col-md-8 col-lg-5 panel-auth">
+    <div class="tarjeta">
+      <h2 class="h4 mb-4">Iniciar sesión</h2>
+
+      @if (error()) {
+        <div class="alert alert-danger py-2" role="alert">
+          <i class="bi bi-exclamation-triangle me-1"></i>{{ error() }}
+        </div>
+      }
+
+      <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+        <div class="mb-3">
+          <label for="identificador" class="form-label">Nombre de usuario o correo</label>
+          <input
+            id="identificador"
+            type="text"
+            class="form-control"
+            formControlName="identificador"
+            autocomplete="username"
+            placeholder="camila.rojas o camila.rojas@foro.cl"
+            [class.is-invalid]="invalido(form.controls.identificador)"
+          />
+          <app-error-campo [control]="form.controls.identificador" />
+        </div>
+
+        <div class="mb-2">
+          <label for="password" class="form-label">Contraseña</label>
+          <div class="input-group">
+            <input
+              id="password"
+              class="form-control"
+              formControlName="password"
+              autocomplete="current-password"
+              [type]="verPassword() ? 'text' : 'password'"
+              [class.is-invalid]="invalido(form.controls.password)"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              [attr.aria-label]="verPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+              (click)="verPassword.set(!verPassword())"
+            >
+              <i class="bi" [class.bi-eye]="!verPassword()" [class.bi-eye-slash]="verPassword()"></i>
+            </button>
+          </div>
+          <app-error-campo [control]="form.controls.password" />
+        </div>
+
+        <div class="text-end mb-4">
+          <a routerLink="/recuperar" class="small">¿Olvidaste tu contraseña?</a>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100 py-2">
+          <i class="bi bi-box-arrow-in-right me-1"></i>Entrar
+        </button>
+      </form>
+
+      <p class="text-center small mt-4 mb-0">
+        ¿Aún no tienes cuenta? <a routerLink="/registro" class="fw-bold">Regístrate aquí</a>
+      </p>
+    </div>
+  </div>
+</div>

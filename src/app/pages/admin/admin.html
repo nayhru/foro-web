@@ -1,0 +1,230 @@
+<div class="encabezado-pagina">
+  <h1><i class="bi bi-gear me-2"></i>Panel de administración</h1>
+  <p>Gestiona los usuarios, sus roles y las categorías del foro.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-people fs-2 text-primary"></i>
+      <div><strong class="fs-4 d-block lh-1">{{ foro.estadisticas().usuarios }}</strong><small class="texto-suave">usuarios</small></div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-tags fs-2 text-success"></i>
+      <div><strong class="fs-4 d-block lh-1">{{ foro.categorias().length }}</strong><small class="texto-suave">categorías</small></div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-chat-square-text fs-2 text-info"></i>
+      <div><strong class="fs-4 d-block lh-1">{{ foro.estadisticas().temas }}</strong><small class="texto-suave">temas visibles</small></div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-flag fs-2 text-warning"></i>
+      <div><strong class="fs-4 d-block lh-1">{{ foro.estadisticas().reportes }}</strong><small class="texto-suave">reportes pendientes</small></div>
+    </div>
+  </div>
+</div>
+
+<ul class="nav nav-pills flex-column flex-sm-row gap-1 mb-3">
+  <li class="nav-item">
+    <button type="button" class="nav-link w-100" [class.active]="pestana() === 'usuarios'" (click)="pestana.set('usuarios')">
+      <i class="bi bi-people me-1"></i>Usuarios
+    </button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="nav-link w-100" [class.active]="pestana() === 'categorias'" (click)="pestana.set('categorias')">
+      <i class="bi bi-tags me-1"></i>Categorías
+    </button>
+  </li>
+</ul>
+
+@if (pestana() === 'usuarios') {
+  <div class="d-flex flex-wrap gap-2 mb-3 small">
+    @for (rol of roles; track rol) {
+      <span class="badge badge-rol rol-{{ rol }} py-2 px-3">{{ nombreRol[rol] }}: {{ totalPorRol(rol) }}</span>
+    }
+  </div>
+
+  <div class="tarjeta p-0 overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-hover mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Usuario</th>
+            <th class="d-none d-md-table-cell">Correo</th>
+            <th class="d-none d-lg-table-cell">Registro</th>
+            <th>Rol</th>
+            <th class="text-center">Activo</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (u of foro.usuarios(); track u.id) {
+            @let esYo = foro.esPropio(u.id);
+            <tr [class.opacity-50]="!u.activo">
+              <td>
+                <div class="d-flex align-items-center gap-2">
+                  <app-avatar [nombre]="u.nombreCompleto" [tamano]="32" />
+                  <div class="lh-sm">
+                    <div class="fw-bold">
+                      {{ u.nombreCompleto }}
+                      @if (esYo) {
+                        <span class="badge text-bg-light border ms-1">Tú</span>
+                      }
+                    </div>
+                    <small class="texto-suave">&#64;{{ u.username }}</small>
+                  </div>
+                </div>
+              </td>
+              <td class="d-none d-md-table-cell">{{ u.email }}</td>
+              <td class="d-none d-lg-table-cell text-nowrap">{{ u.fechaRegistro | date: 'd MMM y' }}</td>
+              <td>
+                <select
+                  class="form-select form-select-sm"
+                  [attr.aria-label]="'Rol de ' + u.username"
+                  [value]="u.rol"
+                  [disabled]="esYo"
+                  (change)="cambiarRol(u.id, $event)"
+                >
+                  @for (rol of roles; track rol) {
+                    <option [value]="rol" [selected]="rol === u.rol">{{ nombreRol[rol] }}</option>
+                  }
+                </select>
+              </td>
+              <td class="text-center">
+                <div class="form-check form-switch d-inline-block">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    [attr.aria-label]="'Cuenta activa de ' + u.username"
+                    [checked]="u.activo"
+                    [disabled]="esYo"
+                    (change)="cambiarEstado(u.id, $event)"
+                  />
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <p class="small texto-suave mt-2">
+    <i class="bi bi-info-circle me-1"></i>Una cuenta desactivada no puede iniciar sesión. No puedes cambiar tu propio rol ni desactivarte.
+  </p>
+} @else {
+  <div class="row g-4">
+    <div class="col-12 col-lg-4">
+      <form [formGroup]="form" (ngSubmit)="guardarCategoria()" class="tarjeta p-3 p-md-4" novalidate>
+        <h2 class="h5 mb-3">{{ editandoId() === null ? 'Nueva categoría' : 'Editar categoría' }}</h2>
+
+        <div class="mb-3">
+          <label for="nombre" class="form-label">Nombre</label>
+          <input
+            id="nombre"
+            class="form-control"
+            formControlName="nombre"
+            [class.is-invalid]="invalido(form.controls.nombre)"
+          />
+          <app-error-campo
+            [control]="form.controls.nombre"
+            [mensajes]="{ duplicado: 'Ya existe una categoría con ese nombre.' }"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label for="descripcion" class="form-label">Descripción</label>
+          <textarea
+            id="descripcion"
+            rows="3"
+            class="form-control"
+            formControlName="descripcion"
+            [class.is-invalid]="invalido(form.controls.descripcion)"
+          ></textarea>
+          <div class="d-flex justify-content-between">
+            <app-error-campo [control]="form.controls.descripcion" />
+            <span class="contador-caracteres ms-auto">{{ form.controls.descripcion.value.length }}/200</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <span class="form-label d-block">Ícono</span>
+          <div class="d-flex flex-wrap gap-2" role="radiogroup" aria-label="Ícono de la categoría">
+            @for (icono of iconos; track icono) {
+              <button
+                type="button"
+                class="btn btn-sm"
+                role="radio"
+                [attr.aria-checked]="form.controls.icono.value === icono"
+                [class.btn-primary]="form.controls.icono.value === icono"
+                [class.btn-light]="form.controls.icono.value !== icono"
+                (click)="form.controls.icono.setValue(icono)"
+              >
+                <i class="bi {{ icono }}"></i>
+              </button>
+            }
+          </div>
+        </div>
+
+        <div class="d-flex gap-2">
+          @if (editandoId() !== null) {
+            <button type="button" class="btn btn-light flex-fill" (click)="cancelarEdicion()">Cancelar</button>
+          }
+          <button type="submit" class="btn btn-primary flex-fill">
+            <i class="bi bi-check-lg me-1"></i>{{ editandoId() === null ? 'Crear categoría' : 'Guardar cambios' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="col-12 col-lg-8">
+      <div class="row g-3">
+        @for (cat of foro.categorias(); track cat.id) {
+          @let total = foro.temasEnCategoria(cat.id);
+          <div class="col-12 col-md-6">
+            <div class="tarjeta p-3 h-100 d-flex flex-column" [class.border-primary]="editandoId() === cat.id">
+              <div class="d-flex align-items-center gap-2 mb-1">
+                <span class="etiqueta-categoria"><i class="bi {{ cat.icono }}"></i></span>
+                <h3 class="h6 mb-0 fw-bold">{{ cat.nombre }}</h3>
+                <span class="ms-auto small texto-suave">{{ total }} tema(s)</span>
+              </div>
+              <p class="small texto-suave flex-grow-1 mb-2">{{ cat.descripcion }}</p>
+              <div class="d-flex gap-2">
+                <button type="button" class="btn btn-sm btn-outline-primary" (click)="editar(cat)">
+                  <i class="bi bi-pencil me-1"></i>Editar
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-sm btn-outline-danger"
+                  [disabled]="total > 0"
+                  [title]="total > 0 ? 'No se puede eliminar porque tiene temas asociados' : 'Eliminar categoría'"
+                  (click)="porEliminar.set(cat)"
+                >
+                  <i class="bi bi-trash me-1"></i>Eliminar
+                </button>
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="col-12">
+            <app-estado-vacio icono="bi-tags" titulo="No hay categorías" mensaje="Crea la primera con el formulario." />
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<app-dialogo-confirmacion
+  [abierto]="porEliminar() !== null"
+  titulo="Eliminar categoría"
+  [mensaje]="'Se eliminará la categoría ' + (porEliminar()?.nombre ?? '') + '. Esta acción no se puede deshacer.'"
+  textoConfirmar="Sí, eliminar"
+  (confirmar)="confirmarEliminacion()"
+  (cancelar)="porEliminar.set(null)"
+/>

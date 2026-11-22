@@ -1,0 +1,132 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-10 col-lg-8 col-xl-7 panel-auth">
+    <div class="encabezado-pagina text-center">
+      <h1>Crea tu cuenta</h1>
+      <p>Súmate a La Fogata y empieza a conversar con tu comunidad.</p>
+    </div>
+
+    <div class="tarjeta">
+      <form [formGroup]="form" (ngSubmit)="enviar()" novalidate>
+        <div class="row g-3">
+          <div class="col-12 col-md-6">
+            <label for="username" class="form-label">Nombre de usuario</label>
+            <div class="input-group">
+              <span class="input-group-text">&#64;</span>
+              <input
+                id="username"
+                class="form-control"
+                formControlName="username"
+                autocomplete="username"
+                placeholder="nombre.apellido"
+                [class.is-invalid]="invalido(form.controls.username)"
+              />
+            </div>
+            <app-error-campo
+              [control]="form.controls.username"
+              [mensajes]="{ duplicado: 'Ese nombre de usuario ya está ocupado.' }"
+            />
+            <div class="form-text">De 3 a 30 caracteres: letras, números, punto o guion bajo.</div>
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="nombreCompleto" class="form-label">Nombre completo</label>
+            <input
+              id="nombreCompleto"
+              class="form-control"
+              formControlName="nombreCompleto"
+              autocomplete="name"
+              placeholder="Nombre Apellido"
+              [class.is-invalid]="invalido(form.controls.nombreCompleto)"
+            />
+            <app-error-campo [control]="form.controls.nombreCompleto" />
+          </div>
+
+          <div class="col-12">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              formControlName="email"
+              autocomplete="email"
+              placeholder="nombre@dominio.cl"
+              [class.is-invalid]="invalido(form.controls.email)"
+            />
+            <app-error-campo
+              [control]="form.controls.email"
+              [mensajes]="{ duplicado: 'Ese correo ya está registrado. ¿Quieres iniciar sesión?' }"
+            />
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="password" class="form-label">Contraseña</label>
+            <div class="input-group">
+              <input
+                id="password"
+                class="form-control"
+                formControlName="password"
+                autocomplete="new-password"
+                [type]="verPassword() ? 'text' : 'password'"
+                [class.is-invalid]="invalido(form.controls.password)"
+              />
+              <button
+                type="button"
+                class="btn btn-outline-secondary"
+                [attr.aria-label]="verPassword() ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                (click)="verPassword.set(!verPassword())"
+              >
+                <i class="bi" [class.bi-eye]="!verPassword()" [class.bi-eye-slash]="verPassword()"></i>
+              </button>
+            </div>
+            <app-error-campo [control]="form.controls.password" />
+            <app-reglas-password [valor]="form.controls.password.value" />
+          </div>
+
+          <div class="col-12 col-md-6">
+            <label for="confirmar" class="form-label">Confirma tu contraseña</label>
+            <input
+              id="confirmar"
+              class="form-control"
+              formControlName="confirmar"
+              autocomplete="new-password"
+              [type]="verPassword() ? 'text' : 'password'"
+              [class.is-invalid]="invalido(form.controls.confirmar) || noCoinciden"
+            />
+            <app-error-campo [control]="form.controls.confirmar" />
+            @if (noCoinciden) {
+              <div class="invalid-feedback d-block">
+                <i class="bi bi-exclamation-circle me-1"></i>Las contraseñas no coinciden.
+              </div>
+            }
+          </div>
+
+          <div class="col-12">
+            <div class="form-check">
+              <input
+                id="aceptaNormas"
+                type="checkbox"
+                class="form-check-input"
+                formControlName="aceptaNormas"
+                [class.is-invalid]="invalido(form.controls.aceptaNormas)"
+              />
+              <label for="aceptaNormas" class="form-check-label">
+                Acepto las normas de convivencia del foro.
+              </label>
+            </div>
+            <app-error-campo [control]="form.controls.aceptaNormas" />
+          </div>
+
+          <div class="col-12 col-md-6 ms-md-auto">
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              <i class="bi bi-person-plus me-1"></i>Crear cuenta
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <p class="text-center small mt-4">
+      ¿Ya tienes cuenta? <a routerLink="/login" class="fw-bold">Inicia sesión</a>
+    </p>
+  </div>
+</div>

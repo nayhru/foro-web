@@ -1,0 +1,31 @@
+.breadcrumb-item.active {
+  max-width: 60%;
+}
+
+.comentario.baneado {
+  background: #fff7f5;
+  border-style: dashed;
+  opacity: 0.85;
+}
+
+.min-w-0 {
+  min-width: 0;
+}
+
+.acciones .btn-link {
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.relacionado {
+  color: var(--lf-texto);
+  border-bottom: 1px solid var(--lf-borde);
+}
+
+.relacionado:last-child {
+  border-bottom: 0;
+}
+
+.relacionado:hover span {
+  color: var(--lf-primario);
+}

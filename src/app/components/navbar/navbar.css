@@ -1,0 +1,42 @@
+.barra {
+  background: var(--lf-carbon);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+}
+
+.navbar-brand {
+  color: #fff;
+}
+
+.nav-link {
+  font-weight: 700;
+  border-radius: 0.5rem;
+  padding-left: 0.75rem !important;
+  padding-right: 0.75rem !important;
+}
+
+.nav-link.active {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.btn-cuenta {
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 999px;
+  padding: 0.25rem 0.9rem 0.25rem 0.3rem;
+}
+
+.btn-cuenta:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.dropdown-menu {
+  margin-top: 0.4rem;
+}
+
+@media (min-width: 992px) {
+  .dropdown-menu {
+    position: absolute;
+    right: 0;
+  }
+}

@@ -1,0 +1,172 @@
+@if (usuario(); as u) {
+  <div class="encabezado-pagina">
+    <h1>Mi perfil</h1>
+    <p>Revisa tus datos, cambia tu contraseña y mira lo que has publicado.</p>
+  </div>
+
+  <div class="row g-4">
+    <aside class="col-12 col-md-5 col-lg-4">
+      <div class="tarjeta p-4 text-center mb-4">
+        <app-avatar [nombre]="u.nombreCompleto" [tamano]="80" />
+        <h2 class="h4 mt-3 mb-0">{{ u.nombreCompleto }}</h2>
+        <div class="texto-suave">&#64;{{ u.username }}</div>
+        <div class="small texto-suave mb-2">{{ u.email }}</div>
+        <span class="badge badge-rol rol-{{ u.rol }}">{{ nombreRol[u.rol] }}</span>
+
+        <div class="row mt-4 g-2">
+          <div class="col-4">
+            <div class="border rounded-3 py-2">
+              <strong class="d-block fs-4">{{ misTemas().length }}</strong>
+              <small class="texto-suave">temas</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="border rounded-3 py-2">
+              <strong class="d-block fs-4">{{ foro.totalComentariosDe(u.id) }}</strong>
+              <small class="texto-suave">comentarios</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="border rounded-3 py-2 lena-recibida" title="Leña que recibieron tus temas">
+              <strong class="d-block fs-4"><i class="bi bi-fire"></i>{{ foro.lenaRecibida(u.id) }}</strong>
+              <small class="texto-suave">de leña</small>
+            </div>
+          </div>
+        </div>
+        <p class="small texto-suave mt-3 mb-0">
+          Miembro desde el {{ u.fechaRegistro | date: "d 'de' MMMM 'de' y" }}
+        </p>
+      </div>
+
+      <div class="tarjeta p-4">
+        <h2 class="h6 text-uppercase texto-suave mb-3">Lo que puedes hacer como {{ nombreRol[u.rol] }}</h2>
+        <ul class="list-unstyled small mb-0">
+          @for (p of privilegios(); track p) {
+            <li class="mb-1"><i class="bi bi-check2 text-success me-1"></i>{{ p }}</li>
+          }
+        </ul>
+      </div>
+    </aside>
+
+    <div class="col-12 col-md-7 col-lg-8">
+      <form [formGroup]="datos" (ngSubmit)="guardarDatos()" class="tarjeta p-3 p-md-4 mb-4" novalidate>
+        <h2 class="h5 mb-3"><i class="bi bi-person-vcard me-2"></i>Datos personales</h2>
+        <div class="row g-3">
+          <div class="col-12 col-lg-6">
+            <label for="username" class="form-label">Nombre de usuario</label>
+            <input id="username" class="form-control" [value]="u.username" disabled />
+            <div class="form-text">El nombre de usuario no se puede cambiar.</div>
+          </div>
+          <div class="col-12 col-lg-6">
+            <label for="nombreCompleto" class="form-label">Nombre completo</label>
+            <input
+              id="nombreCompleto"
+              class="form-control"
+              formControlName="nombreCompleto"
+              autocomplete="name"
+              [class.is-invalid]="invalido(datos.controls.nombreCompleto)"
+            />
+            <app-error-campo [control]="datos.controls.nombreCompleto" />
+          </div>
+          <div class="col-12">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input
+              id="email"
+              type="email"
+              class="form-control"
+              formControlName="email"
+              autocomplete="email"
+              [class.is-invalid]="invalido(datos.controls.email)"
+            />
+            <app-error-campo
+              [control]="datos.controls.email"
+              [mensajes]="{ duplicado: 'Ese correo ya lo usa otra cuenta.' }"
+            />
+          </div>
+          <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2">
+            <button type="button" class="btn btn-light" [disabled]="datos.pristine" (click)="cargarDatos()">
+              Deshacer cambios
+            </button>
+            <button type="submit" class="btn btn-primary" [disabled]="datos.pristine">
+              <i class="bi bi-check-lg me-1"></i>Guardar datos
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <form [formGroup]="clave" (ngSubmit)="cambiarClave()" class="tarjeta p-3 p-md-4 mb-4" novalidate>
+        <h2 class="h5 mb-3"><i class="bi bi-shield-lock me-2"></i>Cambiar contraseña</h2>
+        <div class="row g-3">
+          <div class="col-12">
+            <label for="actual" class="form-label">Contraseña actual</label>
+            <input
+              id="actual"
+              type="password"
+              class="form-control"
+              formControlName="actual"
+              autocomplete="current-password"
+              [class.is-invalid]="invalido(clave.controls.actual)"
+            />
+            <app-error-campo [control]="clave.controls.actual" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="nueva" class="form-label">Nueva contraseña</label>
+            <input
+              id="nueva"
+              type="password"
+              class="form-control"
+              formControlName="nueva"
+              autocomplete="new-password"
+              [class.is-invalid]="invalido(clave.controls.nueva) || igualAActual"
+            />
+            <app-error-campo [control]="clave.controls.nueva" />
+            @if (igualAActual) {
+              <div class="invalid-feedback d-block">
+                <i class="bi bi-exclamation-circle me-1"></i>La nueva contraseña debe ser distinta a la actual.
+              </div>
+            }
+            <app-reglas-password [valor]="clave.controls.nueva.value" />
+          </div>
+          <div class="col-12 col-md-6">
+            <label for="confirmar" class="form-label">Confirma la nueva contraseña</label>
+            <input
+              id="confirmar"
+              type="password"
+              class="form-control"
+              formControlName="confirmar"
+              autocomplete="new-password"
+              [class.is-invalid]="invalido(clave.controls.confirmar) || noCoinciden"
+            />
+            <app-error-campo [control]="clave.controls.confirmar" />
+            @if (noCoinciden) {
+              <div class="invalid-feedback d-block">
+                <i class="bi bi-exclamation-circle me-1"></i>Las contraseñas no coinciden.
+              </div>
+            }
+          </div>
+          <div class="col-12 text-end">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-key me-1"></i>Cambiar contraseña
+            </button>
+          </div>
+        </div>
+      </form>
+
+      <section class="tarjeta p-3 p-md-4">
+        <h2 class="h5 mb-3"><i class="bi bi-journal-text me-2"></i>Mis temas</h2>
+        @for (t of misTemas(); track t.id) {
+          <a [routerLink]="['/temas', t.id]" class="d-flex flex-column flex-sm-row justify-content-between gap-1 py-2 border-bottom mi-tema">
+            <span class="fw-bold">{{ t.titulo }}</span>
+            <small class="texto-suave text-nowrap">
+              {{ t.categoria }} · {{ t.totalComentarios }} comentarios · {{ t.totalLena }} de leña · {{ t.fechaCreacion | date: 'd MMM y' }}
+            </small>
+          </a>
+        } @empty {
+          <app-estado-vacio titulo="Aún no publicas temas" mensaje="Cuando publiques un tema aparecerá aquí.">
+            <a routerLink="/temas/nuevo" class="btn btn-primary btn-sm">Publicar mi primer tema</a>
+          </app-estado-vacio>
+        }
+      </section>
+    </div>
+  </div>
+}

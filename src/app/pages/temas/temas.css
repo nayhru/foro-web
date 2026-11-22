@@ -1,0 +1,78 @@
+.portada {
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 100% 0%, var(--lf-acento-suave) 0, transparent 45%),
+    radial-gradient(circle at 0% 100%, var(--lf-primario-suave) 0, transparent 50%),
+    var(--lf-superficie);
+}
+
+@media (min-width: 768px) {
+  .portada {
+    padding: 2rem 2.5rem;
+  }
+}
+
+.cifras strong {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--lf-primario);
+}
+
+.cifras span {
+  font-size: 0.8rem;
+  color: var(--lf-texto-suave);
+}
+
+.categorias .list-group-item {
+  border: 0;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.categorias .list-group-item .badge {
+  background: var(--lf-fondo);
+  color: var(--lf-texto-suave);
+}
+
+.categorias .list-group-item.active {
+  background: var(--lf-primario);
+  color: #fff;
+}
+
+.categorias .list-group-item.active .badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+
+.encendido {
+  color: var(--lf-texto);
+  border-bottom: 1px solid var(--lf-borde);
+}
+
+.encendido:last-child {
+  border-bottom: 0;
+}
+
+.encendido:hover .fw-bold {
+  color: var(--lf-primario);
+}
+
+.puesto {
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lf-acento-suave);
+  color: #92400e;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.min-w-0 {
+  min-width: 0;
+}

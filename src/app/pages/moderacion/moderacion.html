@@ -1,0 +1,211 @@
+<div class="encabezado-pagina">
+  <h1><i class="bi bi-shield-check me-2"></i>Panel de moderación</h1>
+  <p>Revisa los reportes de la comunidad y oculta el contenido que no cumpla las normas.</p>
+</div>
+
+<div class="row g-3 mb-4">
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-flag fs-2 text-warning"></i>
+      <div><strong class="fs-4 d-block lh-1">{{ foro.reportesPendientes().length }}</strong><small class="texto-suave">reportes pendientes</small></div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-chat-square-text fs-2 text-primary"></i>
+      <div><strong class="fs-4 d-block lh-1">{{ foro.temasPublicos().length }}</strong><small class="texto-suave">temas visibles</small></div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-chat-left-dots fs-2 text-success"></i>
+      <div><strong class="fs-4 d-block lh-1">{{ foro.comentariosPublicos().length }}</strong><small class="texto-suave">comentarios visibles</small></div>
+    </div>
+  </div>
+  <div class="col-12 col-sm-6 col-lg-3">
+    <div class="tarjeta p-3 d-flex align-items-center gap-3">
+      <i class="bi bi-eye-slash fs-2 text-danger"></i>
+      <div>
+        <strong class="fs-4 d-block lh-1">{{ foro.temasBaneados().length + foro.comentariosBaneados().length }}</strong>
+        <small class="texto-suave">contenidos baneados</small>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ul class="nav nav-pills flex-column flex-md-row gap-1 mb-3">
+  <li class="nav-item">
+    <button type="button" class="nav-link w-100" [class.active]="pestana() === 'reportes'" (click)="pestana.set('reportes')">
+      <i class="bi bi-flag me-1"></i>Reportes pendientes
+      @if (foro.reportesPendientes().length) {
+        <span class="badge text-bg-warning ms-1">{{ foro.reportesPendientes().length }}</span>
+      }
+    </button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="nav-link w-100" [class.active]="pestana() === 'temas'" (click)="pestana.set('temas')">
+      <i class="bi bi-chat-square-text me-1"></i>Temas
+    </button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="nav-link w-100" [class.active]="pestana() === 'comentarios'" (click)="pestana.set('comentarios')">
+      <i class="bi bi-chat-left-dots me-1"></i>Comentarios
+    </button>
+  </li>
+  <li class="nav-item">
+    <button type="button" class="nav-link w-100" [class.active]="pestana() === 'baneados'" (click)="pestana.set('baneados')">
+      <i class="bi bi-eye-slash me-1"></i>Contenido baneado
+    </button>
+  </li>
+</ul>
+
+@switch (pestana()) {
+  @case ('reportes') {
+    @for (r of foro.reportesPendientes(); track r.id) {
+      <div class="tarjeta p-3 mb-3">
+        <div class="row g-3 align-items-center">
+          <div class="col-12 col-md-8">
+            <div class="d-flex flex-wrap gap-2 align-items-center mb-1 small">
+              <span class="badge" [class.text-bg-primary]="r.tipo === 'TEMA'" [class.text-bg-secondary]="r.tipo === 'COMENTARIO'">
+                {{ r.tipo === 'TEMA' ? 'Tema' : 'Comentario' }}
+              </span>
+              <span class="texto-suave">Reportado por &#64;{{ r.reportadoPor }} · {{ r.fecha | date: 'd MMM y, HH:mm' }}</span>
+            </div>
+            <a [routerLink]="['/temas', r.temaId]" class="fw-bold d-block text-break">“{{ r.resumen | slice: 0 : 140 }}{{ r.resumen.length > 140 ? '…' : '' }}”</a>
+            <div class="small mt-1"><i class="bi bi-chat-quote me-1"></i><strong>Motivo:</strong> {{ r.motivo }}</div>
+          </div>
+          <div class="col-12 col-md-4 d-flex flex-column flex-sm-row flex-md-column flex-lg-row gap-2 justify-content-md-end">
+            <button type="button" class="btn btn-sm btn-danger" (click)="banear(r.tipo, r.contenidoId, r.motivo)">
+              <i class="bi bi-slash-circle me-1"></i>Banear
+            </button>
+            <button type="button" class="btn btn-sm btn-light border" (click)="descartar(r.id)">
+              <i class="bi bi-x-lg me-1"></i>Descartar
+            </button>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <app-estado-vacio icono="bi-emoji-smile" titulo="No hay reportes pendientes" mensaje="La comunidad está tranquila por ahora." />
+    }
+  }
+
+  @case ('temas') {
+    @if (foro.temasPublicos().length) {
+      <div class="tarjeta p-0 overflow-hidden">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Tema</th>
+                <th class="d-none d-md-table-cell">Autor</th>
+                <th class="d-none d-lg-table-cell">Categoría</th>
+                <th class="d-none d-lg-table-cell">Fecha</th>
+                <th class="text-end">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (t of foro.temasPublicos(); track t.id) {
+                <tr>
+                  <td><a [routerLink]="['/temas', t.id]" class="fw-bold">{{ t.titulo }}</a></td>
+                  <td class="d-none d-md-table-cell">&#64;{{ t.autorUsername }}</td>
+                  <td class="d-none d-lg-table-cell">{{ t.categoria }}</td>
+                  <td class="d-none d-lg-table-cell text-nowrap">{{ t.fechaCreacion | date: 'd MMM y' }}</td>
+                  <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-outline-danger text-nowrap" (click)="banear('TEMA', t.id)">
+                      <i class="bi bi-slash-circle me-1"></i>Banear
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    } @else {
+      <app-estado-vacio titulo="No hay temas visibles" />
+    }
+  }
+
+  @case ('comentarios') {
+    @if (foro.comentariosPublicos().length) {
+      <div class="tarjeta p-0 overflow-hidden">
+        <div class="table-responsive">
+          <table class="table table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Comentario</th>
+                <th class="d-none d-md-table-cell">Autor</th>
+                <th class="d-none d-lg-table-cell">Tema</th>
+                <th class="text-end">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (c of foro.comentariosPublicos(); track c.id) {
+                <tr>
+                  <td>{{ c.contenido | slice: 0 : 90 }}{{ c.contenido.length > 90 ? '…' : '' }}</td>
+                  <td class="d-none d-md-table-cell">&#64;{{ c.autorUsername }}</td>
+                  <td class="d-none d-lg-table-cell"><a [routerLink]="['/temas', c.temaId]">{{ c.temaTitulo | slice: 0 : 40 }}</a></td>
+                  <td class="text-end">
+                    <button type="button" class="btn btn-sm btn-outline-danger text-nowrap" (click)="banear('COMENTARIO', c.id)">
+                      <i class="bi bi-slash-circle me-1"></i>Banear
+                    </button>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    } @else {
+      <app-estado-vacio titulo="No hay comentarios visibles" />
+    }
+  }
+
+  @case ('baneados') {
+    <div class="row g-4">
+      <div class="col-12 col-lg-6">
+        <h2 class="h5 mb-3">Temas baneados</h2>
+        @for (t of foro.temasBaneados(); track t.id) {
+          <div class="tarjeta p-3 mb-3">
+            <a [routerLink]="['/temas', t.id]" class="fw-bold">{{ t.titulo }}</a>
+            <div class="small texto-suave">&#64;{{ t.autorUsername }} · {{ t.categoria }}</div>
+            <div class="small mt-2"><strong>Motivo:</strong> {{ t.motivoBaneo }}</div>
+            <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="quitarBaneo('TEMA', t.id)">
+              <i class="bi bi-eye me-1"></i>Quitar baneo
+            </button>
+          </div>
+        } @empty {
+          <app-estado-vacio icono="bi-check2-circle" titulo="Sin temas baneados" />
+        }
+      </div>
+      <div class="col-12 col-lg-6">
+        <h2 class="h5 mb-3">Comentarios baneados</h2>
+        @for (c of foro.comentariosBaneados(); track c.id) {
+          <div class="tarjeta p-3 mb-3">
+            <p class="mb-1">“{{ c.contenido }}”</p>
+            <div class="small texto-suave">
+              &#64;{{ c.autorUsername }} en <a [routerLink]="['/temas', c.temaId]">{{ c.temaTitulo }}</a>
+            </div>
+            <div class="small mt-2"><strong>Motivo:</strong> {{ c.motivoBaneo }}</div>
+            <button type="button" class="btn btn-sm btn-outline-primary mt-2" (click)="quitarBaneo('COMENTARIO', c.id)">
+              <i class="bi bi-eye me-1"></i>Quitar baneo
+            </button>
+          </div>
+        } @empty {
+          <app-estado-vacio icono="bi-check2-circle" titulo="Sin comentarios baneados" />
+        }
+      </div>
+    </div>
+  }
+}
+
+<app-dialogo-motivo
+  [abierto]="porBanear() !== null"
+  [motivoInicial]="porBanear()?.motivoInicial ?? ''"
+  [titulo]="porBanear()?.tipo === 'TEMA' ? 'Banear tema' : 'Banear comentario'"
+  descripcion="El contenido dejará de verse en el foro. Puedes quitar el baneo más tarde desde la pestaña de contenido baneado."
+  textoConfirmar="Banear"
+  [peligro]="true"
+  (confirmar)="confirmarBaneo($event)"
+  (cancelar)="porBanear.set(null)"
+/>

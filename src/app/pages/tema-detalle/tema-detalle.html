@@ -1,0 +1,268 @@
+@if (tema(); as t) {
+  <nav aria-label="Ruta" class="mb-3">
+    <ol class="breadcrumb small mb-0">
+      <li class="breadcrumb-item"><a routerLink="/">Temas</a></li>
+      <li class="breadcrumb-item">
+        <a routerLink="/" [queryParams]="{ categoria: t.categoriaId }">{{ t.categoria }}</a>
+      </li>
+      <li class="breadcrumb-item active text-truncate d-none d-md-block" aria-current="page">{{ t.titulo }}</li>
+    </ol>
+  </nav>
+
+  <div class="row g-4">
+    <div class="col-12 col-lg-8">
+      @if (t.baneado) {
+        <div class="alert alert-warning d-flex flex-column flex-md-row gap-2 align-items-md-center">
+          <div class="flex-grow-1">
+            <i class="bi bi-eye-slash me-1"></i><strong>Tema baneado.</strong>
+            Solo la moderación puede verlo. Motivo: {{ t.motivoBaneo }}
+          </div>
+          <button type="button" class="btn btn-sm btn-outline-dark" (click)="quitarBaneo('TEMA', t.id)">
+            Quitar baneo
+          </button>
+        </div>
+      }
+
+      <article class="tarjeta p-3 p-md-4 mb-4">
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+          <span class="etiqueta-categoria"><i class="bi {{ t.categoriaIcono }}"></i>{{ t.categoria }}</span>
+          <app-nivel-fuego [nivel]="t.nivel" />
+        </div>
+        <h1 class="h2 mb-3">{{ t.titulo }}</h1>
+
+        <div class="d-flex align-items-center gap-2 mb-4 small">
+          <app-avatar [nombre]="t.autor" [tamano]="40" />
+          <div class="lh-sm">
+            <div class="fw-bold">{{ t.autor }}</div>
+            <span class="texto-suave">
+              &#64;{{ t.autorUsername }} · {{ t.fechaCreacion | date: "d 'de' MMMM 'de' y, HH:mm" }}
+              @if (t.fechaEdicion) {
+                · <em>editado</em>
+              }
+            </span>
+          </div>
+        </div>
+
+        <p class="texto-largo mb-4">{{ t.contenido }}</p>
+
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+          <app-boton-lena [tema]="t" />
+          <small class="texto-suave">
+            {{ t.totalLena === 1 ? '1 persona le echó leña' : t.totalLena + ' personas le echaron leña' }}
+          </small>
+        </div>
+
+        @if (foro.estaAutenticado()) {
+          <div class="d-flex flex-wrap gap-2 border-top pt-3">
+            @if (foro.puedeGestionar(t.autorId)) {
+              <a [routerLink]="['/temas', t.id, 'editar']" class="btn btn-sm btn-outline-primary">
+                <i class="bi bi-pencil me-1"></i>Editar
+              </a>
+              <button type="button" class="btn btn-sm btn-outline-danger" (click)="porEliminar.set({ tipo: 'TEMA', id: t.id })">
+                <i class="bi bi-trash me-1"></i>Eliminar
+              </button>
+            }
+            @if (foro.puede('MODERAR') && !t.baneado) {
+              <button type="button" class="btn btn-sm btn-outline-dark" (click)="porBanear.set({ tipo: 'TEMA', id: t.id })">
+                <i class="bi bi-slash-circle me-1"></i>Banear
+              </button>
+            }
+            @if (foro.puedeReportar(t.autorId)) {
+              <button type="button" class="btn btn-sm btn-light ms-auto" (click)="porReportar.set({ tipo: 'TEMA', id: t.id })">
+                <i class="bi bi-flag me-1"></i>Reportar
+              </button>
+            }
+          </div>
+        }
+      </article>
+
+      <section>
+        <h2 class="h5 mb-3">
+          <i class="bi bi-chat-left-text me-1"></i>Comentarios
+          <span class="badge rounded-pill text-bg-light border">{{ comentarios().length }}</span>
+        </h2>
+
+        @for (c of comentarios(); track c.id) {
+          <div class="tarjeta p-3 mb-3 comentario" [class.baneado]="c.baneado">
+            <div class="d-flex gap-2">
+              <app-avatar [nombre]="c.autor" [tamano]="34" />
+              <div class="flex-grow-1 min-w-0">
+                <div class="d-flex flex-wrap align-items-baseline gap-1 small">
+                  <span class="fw-bold">{{ c.autor }}</span>
+                  @if (c.autorId === t.autorId) {
+                    <span class="badge text-bg-light border">Autor</span>
+                  }
+                  <span class="texto-suave">· {{ c.fecha | date: 'd MMM y, HH:mm' }}</span>
+                  @if (c.fechaEdicion) {
+                    <span class="texto-suave">· <em>editado</em></span>
+                  }
+                </div>
+
+                @if (c.baneado) {
+                  <div class="small text-danger mt-1">
+                    <i class="bi bi-eye-slash me-1"></i>Comentario baneado: {{ c.motivoBaneo }}
+                  </div>
+                }
+
+                @if (editandoId() === c.id) {
+                  <form [formGroup]="edicion" (ngSubmit)="guardarEdicion()" class="mt-2" novalidate>
+                    <textarea
+                      rows="3"
+                      class="form-control"
+                      formControlName="contenido"
+                      aria-label="Editar comentario"
+                      [class.is-invalid]="invalido(edicion.controls.contenido)"
+                    ></textarea>
+                    <app-error-campo [control]="edicion.controls.contenido" />
+                    <div class="d-flex gap-2 mt-2">
+                      <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                      <button type="button" class="btn btn-sm btn-light" (click)="editandoId.set(null)">Cancelar</button>
+                    </div>
+                  </form>
+                } @else {
+                  <p class="texto-largo mb-2 mt-1">{{ c.contenido }}</p>
+                  <div class="d-flex flex-wrap gap-3 small acciones">
+                    @if (foro.puedeGestionar(c.autorId)) {
+                      <button type="button" class="btn btn-link btn-sm p-0" (click)="empezarEdicion(c)">
+                        <i class="bi bi-pencil me-1"></i>Editar
+                      </button>
+                      <button type="button" class="btn btn-link btn-sm p-0 text-danger" (click)="porEliminar.set({ tipo: 'COMENTARIO', id: c.id })">
+                        <i class="bi bi-trash me-1"></i>Eliminar
+                      </button>
+                    }
+                    @if (foro.puede('MODERAR')) {
+                      @if (c.baneado) {
+                        <button type="button" class="btn btn-link btn-sm p-0 text-dark" (click)="quitarBaneo('COMENTARIO', c.id)">
+                          <i class="bi bi-eye me-1"></i>Quitar baneo
+                        </button>
+                      } @else {
+                        <button type="button" class="btn btn-link btn-sm p-0 text-dark" (click)="porBanear.set({ tipo: 'COMENTARIO', id: c.id })">
+                          <i class="bi bi-slash-circle me-1"></i>Banear
+                        </button>
+                      }
+                    }
+                    @if (foro.puedeReportar(c.autorId) && !c.baneado) {
+                      <button type="button" class="btn btn-link btn-sm p-0 texto-suave" (click)="porReportar.set({ tipo: 'COMENTARIO', id: c.id })">
+                        <i class="bi bi-flag me-1"></i>Reportar
+                      </button>
+                    }
+                  </div>
+                }
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <app-estado-vacio
+            icono="bi-chat-heart"
+            titulo="Aún no hay comentarios"
+            mensaje="Cuéntanos qué opinas y empieza la conversación."
+          />
+        }
+
+        <div class="mt-4">
+          @if (foro.puede('COMENTAR') && !t.baneado) {
+            <form [formGroup]="nuevoComentario" (ngSubmit)="comentar()" class="tarjeta p-3" novalidate>
+              <label for="nuevo-comentario" class="form-label">Deja tu comentario</label>
+              <textarea
+                id="nuevo-comentario"
+                rows="3"
+                class="form-control"
+                formControlName="contenido"
+                placeholder="Escribe con respeto y aporta a la conversación"
+                [class.is-invalid]="invalido(nuevoComentario.controls.contenido)"
+              ></textarea>
+              <div class="d-flex justify-content-between">
+                <app-error-campo [control]="nuevoComentario.controls.contenido" />
+                <span class="contador-caracteres ms-auto">{{ nuevoComentario.controls.contenido.value.length }}/1000</span>
+              </div>
+              <div class="text-end mt-2">
+                <button type="submit" class="btn btn-primary">
+                  <i class="bi bi-send me-1"></i>Comentar
+                </button>
+              </div>
+            </form>
+          } @else if (!foro.estaAutenticado()) {
+            <div class="tarjeta p-3 text-center">
+              <p class="mb-2">¿Quieres sumarte a la conversación?</p>
+              <a routerLink="/login" [queryParams]="{ volver: '/temas/' + t.id }" class="btn btn-primary btn-sm">
+                Inicia sesión para comentar
+              </a>
+            </div>
+          }
+        </div>
+      </section>
+    </div>
+
+    <aside class="col-12 col-lg-4">
+      @if (autor(); as a) {
+        <div class="tarjeta p-3 p-md-4 mb-4 text-center">
+          <app-avatar [nombre]="a.nombreCompleto" [tamano]="64" />
+          <h2 class="h5 mt-2 mb-0">{{ a.nombreCompleto }}</h2>
+          <div class="texto-suave small mb-2">&#64;{{ a.username }}</div>
+          <span class="badge badge-rol rol-{{ a.rol }}">{{ nombreRol[a.rol] }}</span>
+          <div class="row mt-3 small">
+            <div class="col-6">
+              <strong class="d-block fs-5">{{ foro.temasDe(a.id).length }}</strong>temas
+            </div>
+            <div class="col-6">
+              <strong class="d-block fs-5">{{ foro.totalComentariosDe(a.id) }}</strong>comentarios
+            </div>
+          </div>
+          <div class="small texto-suave mt-3">Miembro desde {{ a.fechaRegistro | date: 'MMMM y' }}</div>
+        </div>
+      }
+
+      <div class="tarjeta p-3 p-md-4">
+        <h2 class="h6 text-uppercase texto-suave mb-3">Más en {{ t.categoria }}</h2>
+        @for (r of relacionados(); track r.id) {
+          <a [routerLink]="['/temas', r.id]" class="d-block relacionado py-2">
+            <span class="fw-bold d-block">{{ r.titulo }}</span>
+            <small class="texto-suave">{{ r.autor }} · {{ r.totalComentarios }} comentarios</small>
+          </a>
+        } @empty {
+          <p class="small texto-suave mb-0">No hay más temas en esta categoría por ahora.</p>
+        }
+      </div>
+    </aside>
+  </div>
+
+  <app-dialogo-confirmacion
+    [abierto]="porEliminar() !== null"
+    [titulo]="porEliminar()?.tipo === 'TEMA' ? 'Eliminar tema' : 'Eliminar comentario'"
+    [mensaje]="
+      porEliminar()?.tipo === 'TEMA'
+        ? 'Se eliminará el tema junto con todos sus comentarios. Esta acción no se puede deshacer.'
+        : 'El comentario se eliminará de forma permanente.'
+    "
+    textoConfirmar="Sí, eliminar"
+    (confirmar)="confirmarEliminacion()"
+    (cancelar)="porEliminar.set(null)"
+  />
+
+  <app-dialogo-motivo
+    [abierto]="porReportar() !== null"
+    titulo="Reportar contenido"
+    descripcion="Cuéntale a la moderación por qué este contenido no cumple las normas. Tu reporte es anónimo para el resto de la comunidad."
+    textoConfirmar="Enviar reporte"
+    (confirmar)="enviarReporte($event)"
+    (cancelar)="porReportar.set(null)"
+  />
+
+  <app-dialogo-motivo
+    [abierto]="porBanear() !== null"
+    titulo="Banear contenido"
+    descripcion="El contenido dejará de verse en el foro. El motivo queda registrado en el panel de moderación."
+    textoConfirmar="Banear"
+    [peligro]="true"
+    (confirmar)="enviarBaneo($event)"
+    (cancelar)="porBanear.set(null)"
+  />
+} @else {
+  <app-estado-vacio
+    icono="bi-question-circle"
+    titulo="Este tema no existe o ya no está disponible"
+    mensaje="Puede que lo hayan eliminado o que la moderación lo haya retirado."
+  >
+    <a routerLink="/" class="btn btn-primary">Volver a los temas</a>
+  </app-estado-vacio>
+}
