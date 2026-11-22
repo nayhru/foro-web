@@ -1,1 +1,204 @@
-/* You can add global styles to this file, and also import other style files */
+/* Paleta de Tertulia */
+:root {
+  --tt-primario: #1f5f5b;
+  --tt-primario-rgb: 31, 95, 91;
+  --tt-primario-oscuro: #154340;
+  --tt-primario-suave: #dcebe9;
+  --tt-acento: #e07a5f;
+  --tt-acento-oscuro: #c4613f;
+  --tt-acento-suave: #fbe6de;
+  --tt-fondo: #f7f4ef;
+  --tt-superficie: #ffffff;
+  --tt-texto: #24302f;
+  --tt-texto-suave: #5f6b6a;
+  --tt-borde: #e6dfd4;
+  --tt-radio: 0.9rem;
+  --tt-sombra: 0 2px 10px rgba(36, 48, 47, 0.06);
+  --tt-sombra-hover: 0 8px 24px rgba(36, 48, 47, 0.12);
+  --tt-fuente: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  --bs-primary: var(--tt-primario);
+  --bs-primary-rgb: var(--tt-primario-rgb);
+  --bs-link-color: var(--tt-primario);
+  --bs-link-color-rgb: var(--tt-primario-rgb);
+  --bs-link-hover-color: var(--tt-primario-oscuro);
+  --bs-body-font-family: var(--tt-fuente);
+  --bs-body-color: var(--tt-texto);
+  --bs-body-bg: var(--tt-fondo);
+  --bs-border-color: var(--tt-borde);
+  --bs-border-radius: 0.6rem;
+}
+
+body {
+  background-color: var(--tt-fondo);
+  color: var(--tt-texto);
+  font-family: var(--tt-fuente);
+}
+
+h1, h2, h3, h4, h5, .titulo-seccion {
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+a {
+  text-decoration: none;
+}
+
+/* Botones con los colores propios */
+.btn-primary {
+  --bs-btn-bg: var(--tt-primario);
+  --bs-btn-border-color: var(--tt-primario);
+  --bs-btn-hover-bg: var(--tt-primario-oscuro);
+  --bs-btn-hover-border-color: var(--tt-primario-oscuro);
+  --bs-btn-active-bg: var(--tt-primario-oscuro);
+  --bs-btn-active-border-color: var(--tt-primario-oscuro);
+  --bs-btn-disabled-bg: var(--tt-primario);
+  --bs-btn-disabled-border-color: var(--tt-primario);
+  font-weight: 700;
+}
+
+.btn-outline-primary {
+  --bs-btn-color: var(--tt-primario);
+  --bs-btn-border-color: var(--tt-primario);
+  --bs-btn-hover-bg: var(--tt-primario);
+  --bs-btn-hover-border-color: var(--tt-primario);
+  --bs-btn-active-bg: var(--tt-primario-oscuro);
+  --bs-btn-active-border-color: var(--tt-primario-oscuro);
+  font-weight: 700;
+}
+
+.btn-acento {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--tt-acento);
+  --bs-btn-border-color: var(--tt-acento);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--tt-acento-oscuro);
+  --bs-btn-hover-border-color: var(--tt-acento-oscuro);
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: var(--tt-acento-oscuro);
+  --bs-btn-active-border-color: var(--tt-acento-oscuro);
+  font-weight: 700;
+}
+
+.form-control:focus,
+.form-select:focus,
+.form-check-input:focus {
+  border-color: var(--tt-primario);
+  box-shadow: 0 0 0 0.2rem rgba(var(--tt-primario-rgb), 0.18);
+}
+
+.form-check-input:checked {
+  background-color: var(--tt-primario);
+  border-color: var(--tt-primario);
+}
+
+.form-label {
+  font-weight: 700;
+  font-size: 0.92rem;
+}
+
+/* Tarjetas */
+.tarjeta {
+  background: var(--tt-superficie);
+  border: 1px solid var(--tt-borde);
+  border-radius: var(--tt-radio);
+  box-shadow: var(--tt-sombra);
+}
+
+.tarjeta-hover {
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.tarjeta-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--tt-sombra-hover);
+}
+
+.texto-suave {
+  color: var(--tt-texto-suave);
+}
+
+.encabezado-pagina {
+  margin-bottom: 1.5rem;
+}
+
+.encabezado-pagina p {
+  color: var(--tt-texto-suave);
+  margin-bottom: 0;
+}
+
+/* Etiquetas */
+.etiqueta-categoria {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.2rem 0.65rem;
+  border-radius: 999px;
+  background: var(--tt-primario-suave);
+  color: var(--tt-primario-oscuro);
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.badge-rol {
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-rol.rol-ADMIN {
+  background: var(--tt-acento);
+}
+
+.badge-rol.rol-MODERADOR {
+  background: var(--tt-primario);
+}
+
+.badge-rol.rol-USUARIO {
+  background: #8a9796;
+}
+
+/* Formularios de autenticación */
+.panel-auth {
+  max-width: 100%;
+}
+
+.panel-auth .tarjeta {
+  padding: 2rem 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .panel-auth .tarjeta {
+    padding: 2.5rem;
+  }
+}
+
+/* Contenido de texto largo respetando saltos de línea */
+.texto-largo {
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+  line-height: 1.65;
+}
+
+.contador-caracteres {
+  font-size: 0.78rem;
+  color: var(--tt-texto-suave);
+}
+
+/* Pestañas de los paneles */
+.nav-pills .nav-link {
+  color: var(--tt-texto-suave);
+  font-weight: 700;
+}
+
+.nav-pills .nav-link.active {
+  background: var(--tt-primario);
+}
+
+.table > :not(caption) > * > * {
+  vertical-align: middle;
+}
+
+.toast {
+  --bs-toast-max-width: 360px;
+}

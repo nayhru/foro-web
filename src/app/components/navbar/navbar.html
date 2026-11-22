@@ -1,0 +1,95 @@
+<nav class="navbar navbar-expand-lg navbar-dark barra sticky-top">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/">
+      <app-logo [tamano]="34" [claro]="true" />
+    </a>
+
+    <button
+      class="navbar-toggler"
+      type="button"
+      aria-controls="menu-principal"
+      [attr.aria-expanded]="menuAbierto()"
+      aria-label="Abrir menú"
+      (click)="alternarMenu()"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="menu-principal" [class.show]="menuAbierto()">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a
+            class="nav-link"
+            routerLink="/"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <i class="bi bi-chat-square-text me-1"></i>Temas
+          </a>
+        </li>
+        @if (foro.puede('PUBLICAR')) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/temas/nuevo" routerLinkActive="active">
+              <i class="bi bi-plus-circle me-1"></i>Nuevo tema
+            </a>
+          </li>
+        }
+        @if (foro.puede('MODERAR')) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/moderacion" routerLinkActive="active">
+              <i class="bi bi-shield-check me-1"></i>Moderación
+              @if (foro.estadisticas().reportes > 0) {
+                <span class="badge rounded-pill text-bg-warning ms-1">{{
+                  foro.estadisticas().reportes
+                }}</span>
+              }
+            </a>
+          </li>
+        }
+        @if (foro.puede('ADMINISTRAR')) {
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/admin" routerLinkActive="active">
+              <i class="bi bi-gear me-1"></i>Administración
+            </a>
+          </li>
+        }
+      </ul>
+
+      @if (foro.usuarioActual(); as usuario) {
+        <div class="cuenta position-relative">
+          <button
+            type="button"
+            class="btn btn-cuenta d-flex align-items-center gap-2"
+            [attr.aria-expanded]="cuentaAbierta()"
+            (click)="alternarCuenta()"
+          >
+            <app-avatar [nombre]="usuario.nombreCompleto" [tamano]="32" />
+            <span class="text-start lh-sm">
+              <span class="d-block fw-bold">{{ usuario.username }}</span>
+              <small class="opacity-75">{{ nombreRol[usuario.rol] }}</small>
+            </span>
+            <i class="bi bi-chevron-down small"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end shadow" [class.show]="cuentaAbierta()">
+            <li>
+              <a class="dropdown-item" routerLink="/perfil">
+                <i class="bi bi-person me-2"></i>Mi perfil
+              </a>
+            </li>
+            <li><hr class="dropdown-divider" /></li>
+            <li>
+              <button type="button" class="dropdown-item text-danger" (click)="cerrarSesion()">
+                <i class="bi bi-box-arrow-right me-2"></i>Cerrar sesión
+              </button>
+            </li>
+          </ul>
+        </div>
+      } @else {
+        <div class="d-flex flex-column flex-lg-row gap-2">
+          <a class="btn btn-outline-light" routerLink="/login">Iniciar sesión</a>
+          <a class="btn btn-acento" routerLink="/registro">Crear cuenta</a>
+        </div>
+      }
+    </div>
+  </div>
+</nav>
