@@ -1,0 +1,88 @@
+<div class="encabezado-pagina">
+  <h1>{{ editando() ? 'Editar tema' : 'Publicar un tema nuevo' }}</h1>
+  <p>
+    {{
+      editando()
+        ? 'Corrige o completa tu publicación. Se marcará como editada.'
+        : 'Abre una conversación con la comunidad. Mientras más claro, mejores respuestas.'
+    }}
+  </p>
+</div>
+
+<div class="row g-4">
+  <div class="col-12 col-lg-8">
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="tarjeta p-3 p-md-4" novalidate>
+      <div class="row g-3">
+        <div class="col-12 col-md-8">
+          <label for="titulo" class="form-label">Título</label>
+          <input
+            id="titulo"
+            class="form-control"
+            formControlName="titulo"
+            placeholder="Por ejemplo: ¿Alguien tiene apuntes de Base de Datos?"
+            [class.is-invalid]="invalido(form.controls.titulo)"
+          />
+          <div class="d-flex justify-content-between">
+            <app-error-campo [control]="form.controls.titulo" />
+            <span class="contador-caracteres ms-auto">{{ form.controls.titulo.value.length }}/150</span>
+          </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+          <label for="categoria" class="form-label">Categoría</label>
+          <select
+            id="categoria"
+            class="form-select"
+            formControlName="categoriaId"
+            [class.is-invalid]="invalido(form.controls.categoriaId)"
+          >
+            <option [ngValue]="null" disabled>Elige una</option>
+            @for (cat of foro.categorias(); track cat.id) {
+              <option [ngValue]="cat.id">{{ cat.nombre }}</option>
+            }
+          </select>
+          <app-error-campo
+            [control]="form.controls.categoriaId"
+            [mensajes]="{ required: 'Elige una categoría.' }"
+          />
+        </div>
+
+        <div class="col-12">
+          <label for="contenido" class="form-label">Contenido</label>
+          <textarea
+            id="contenido"
+            rows="9"
+            class="form-control"
+            formControlName="contenido"
+            placeholder="Cuenta los detalles de tu tema"
+            [class.is-invalid]="invalido(form.controls.contenido)"
+          ></textarea>
+          <div class="d-flex justify-content-between">
+            <app-error-campo [control]="form.controls.contenido" />
+            <span class="contador-caracteres ms-auto">{{ form.controls.contenido.value.length }}/4000</span>
+          </div>
+        </div>
+
+        <div class="col-12 d-flex flex-column flex-sm-row justify-content-end gap-2">
+          <button type="button" class="btn btn-light" (click)="cancelar()">Cancelar</button>
+          <button type="submit" class="btn btn-primary">
+            <i class="bi me-1" [class.bi-check-lg]="editando()" [class.bi-send]="!editando()"></i>
+            {{ editando() ? 'Guardar cambios' : 'Publicar tema' }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <aside class="col-12 col-lg-4">
+    <div class="tarjeta p-3 p-md-4">
+      <h2 class="h6 text-uppercase texto-suave mb-3"><i class="bi bi-lightbulb me-1"></i>Consejos</h2>
+      <ul class="small mb-0 ps-3">
+        <li class="mb-2">Usa un título que resuma tu pregunta o idea (entre 5 y 150 caracteres).</li>
+        <li class="mb-2">Elige la categoría que más se acerque, así llega a quien sabe del tema.</li>
+        <li class="mb-2">Revisa que no exista un tema parecido antes de publicar.</li>
+        <li>Recuerda las <a routerLink="/temas/2">normas de convivencia</a>.</li>
+      </ul>
+    </div>
+  </aside>
+</div>

@@ -1,0 +1,53 @@
+.portada {
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at 100% 0%, var(--tt-acento-suave) 0, transparent 45%),
+    radial-gradient(circle at 0% 100%, var(--tt-primario-suave) 0, transparent 50%),
+    var(--tt-superficie);
+}
+
+@media (min-width: 768px) {
+  .portada {
+    padding: 2rem 2.5rem;
+  }
+}
+
+.cifras strong {
+  display: block;
+  font-size: 1.5rem;
+  color: var(--tt-primario);
+}
+
+.cifras span {
+  font-size: 0.8rem;
+  color: var(--tt-texto-suave);
+}
+
+.categorias .list-group-item {
+  border: 0;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.categorias .list-group-item .badge {
+  background: var(--tt-fondo);
+  color: var(--tt-texto-suave);
+}
+
+.categorias .list-group-item.active {
+  background: var(--tt-primario);
+  color: #fff;
+}
+
+.categorias .list-group-item.active .badge {
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+@media (min-width: 992px) {
+  .categorias {
+    position: sticky;
+    top: 5.5rem;
+  }
+}

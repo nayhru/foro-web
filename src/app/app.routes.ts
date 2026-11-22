@@ -1,7 +1,29 @@
 import { Routes } from '@angular/router';
-import { invitadoGuard } from './guards/auth.guards';
+import { autenticadoGuard, invitadoGuard } from './guards/auth.guards';
 
 export const routes: Routes = [
+  {
+    path: '',
+    title: 'Temas · Tertulia',
+    loadComponent: () => import('./pages/temas/temas').then((m) => m.Temas),
+  },
+  {
+    path: 'temas/nuevo',
+    title: 'Nuevo tema · Tertulia',
+    canActivate: [autenticadoGuard],
+    loadComponent: () => import('./pages/tema-form/tema-form').then((m) => m.TemaForm),
+  },
+  {
+    path: 'temas/:id/editar',
+    title: 'Editar tema · Tertulia',
+    canActivate: [autenticadoGuard],
+    loadComponent: () => import('./pages/tema-form/tema-form').then((m) => m.TemaForm),
+  },
+  {
+    path: 'temas/:id',
+    title: 'Tema · Tertulia',
+    loadComponent: () => import('./pages/tema-detalle/tema-detalle').then((m) => m.TemaDetalle),
+  },
   {
     path: 'login',
     title: 'Iniciar sesión · Tertulia',
