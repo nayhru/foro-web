@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-const PREFIJO = 'tertulia.';
+const PREFIJO = 'lafogata.';
 
 // Envuelve localStorage; si el navegador lo bloquea, la app sigue funcionando solo en memoria
 @Injectable({ providedIn: 'root' })

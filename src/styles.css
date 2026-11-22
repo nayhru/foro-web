@@ -1,38 +1,45 @@
-/* Paleta de Tertulia */
+/* Paleta de La Fogata */
 :root {
-  --tt-primario: #1f5f5b;
-  --tt-primario-rgb: 31, 95, 91;
-  --tt-primario-oscuro: #154340;
-  --tt-primario-suave: #dcebe9;
-  --tt-acento: #e07a5f;
-  --tt-acento-oscuro: #c4613f;
-  --tt-acento-suave: #fbe6de;
-  --tt-fondo: #f7f4ef;
-  --tt-superficie: #ffffff;
-  --tt-texto: #24302f;
-  --tt-texto-suave: #5f6b6a;
-  --tt-borde: #e6dfd4;
-  --tt-radio: 0.9rem;
-  --tt-sombra: 0 2px 10px rgba(36, 48, 47, 0.06);
-  --tt-sombra-hover: 0 8px 24px rgba(36, 48, 47, 0.12);
-  --tt-fuente: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  /* brasa */
+  --lf-primario: #c2410c;
+  --lf-primario-rgb: 194, 65, 12;
+  --lf-primario-oscuro: #9a3412;
+  --lf-primario-suave: #fdebdd;
+  /* ámbar */
+  --lf-acento: #f59e0b;
+  --lf-acento-oscuro: #d97706;
+  --lf-acento-suave: #fef3c7;
+  /* carbón */
+  --lf-carbon: #292524;
+  --lf-carbon-claro: #44403c;
+  --lf-leno: #8b5a3c;
+  /* crema y neutros */
+  --lf-fondo: #fbf6ee;
+  --lf-superficie: #ffffff;
+  --lf-texto: #292524;
+  --lf-texto-suave: #6b6158;
+  --lf-borde: #ece2d3;
+  --lf-radio: 0.9rem;
+  --lf-sombra: 0 2px 10px rgba(41, 37, 36, 0.06);
+  --lf-sombra-hover: 0 8px 24px rgba(41, 37, 36, 0.12);
+  --lf-fuente: 'Nunito', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
 
-  --bs-primary: var(--tt-primario);
-  --bs-primary-rgb: var(--tt-primario-rgb);
-  --bs-link-color: var(--tt-primario);
-  --bs-link-color-rgb: var(--tt-primario-rgb);
-  --bs-link-hover-color: var(--tt-primario-oscuro);
-  --bs-body-font-family: var(--tt-fuente);
-  --bs-body-color: var(--tt-texto);
-  --bs-body-bg: var(--tt-fondo);
-  --bs-border-color: var(--tt-borde);
+  --bs-primary: var(--lf-primario);
+  --bs-primary-rgb: var(--lf-primario-rgb);
+  --bs-link-color: var(--lf-primario);
+  --bs-link-color-rgb: var(--lf-primario-rgb);
+  --bs-link-hover-color: var(--lf-primario-oscuro);
+  --bs-body-font-family: var(--lf-fuente);
+  --bs-body-color: var(--lf-texto);
+  --bs-body-bg: var(--lf-fondo);
+  --bs-border-color: var(--lf-borde);
   --bs-border-radius: 0.6rem;
 }
 
 body {
-  background-color: var(--tt-fondo);
-  color: var(--tt-texto);
-  font-family: var(--tt-fuente);
+  background-color: var(--lf-fondo);
+  color: var(--lf-texto);
+  font-family: var(--lf-fuente);
 }
 
 h1, h2, h3, h4, h5, .titulo-seccion {
@@ -46,50 +53,50 @@ a {
 
 /* Botones con los colores propios */
 .btn-primary {
-  --bs-btn-bg: var(--tt-primario);
-  --bs-btn-border-color: var(--tt-primario);
-  --bs-btn-hover-bg: var(--tt-primario-oscuro);
-  --bs-btn-hover-border-color: var(--tt-primario-oscuro);
-  --bs-btn-active-bg: var(--tt-primario-oscuro);
-  --bs-btn-active-border-color: var(--tt-primario-oscuro);
-  --bs-btn-disabled-bg: var(--tt-primario);
-  --bs-btn-disabled-border-color: var(--tt-primario);
+  --bs-btn-bg: var(--lf-primario);
+  --bs-btn-border-color: var(--lf-primario);
+  --bs-btn-hover-bg: var(--lf-primario-oscuro);
+  --bs-btn-hover-border-color: var(--lf-primario-oscuro);
+  --bs-btn-active-bg: var(--lf-primario-oscuro);
+  --bs-btn-active-border-color: var(--lf-primario-oscuro);
+  --bs-btn-disabled-bg: var(--lf-primario);
+  --bs-btn-disabled-border-color: var(--lf-primario);
   font-weight: 700;
 }
 
 .btn-outline-primary {
-  --bs-btn-color: var(--tt-primario);
-  --bs-btn-border-color: var(--tt-primario);
-  --bs-btn-hover-bg: var(--tt-primario);
-  --bs-btn-hover-border-color: var(--tt-primario);
-  --bs-btn-active-bg: var(--tt-primario-oscuro);
-  --bs-btn-active-border-color: var(--tt-primario-oscuro);
+  --bs-btn-color: var(--lf-primario);
+  --bs-btn-border-color: var(--lf-primario);
+  --bs-btn-hover-bg: var(--lf-primario);
+  --bs-btn-hover-border-color: var(--lf-primario);
+  --bs-btn-active-bg: var(--lf-primario-oscuro);
+  --bs-btn-active-border-color: var(--lf-primario-oscuro);
   font-weight: 700;
 }
 
 .btn-acento {
-  --bs-btn-color: #fff;
-  --bs-btn-bg: var(--tt-acento);
-  --bs-btn-border-color: var(--tt-acento);
-  --bs-btn-hover-color: #fff;
-  --bs-btn-hover-bg: var(--tt-acento-oscuro);
-  --bs-btn-hover-border-color: var(--tt-acento-oscuro);
-  --bs-btn-active-color: #fff;
-  --bs-btn-active-bg: var(--tt-acento-oscuro);
-  --bs-btn-active-border-color: var(--tt-acento-oscuro);
+  --bs-btn-color: var(--lf-carbon);
+  --bs-btn-bg: var(--lf-acento);
+  --bs-btn-border-color: var(--lf-acento);
+  --bs-btn-hover-color: var(--lf-carbon);
+  --bs-btn-hover-bg: var(--lf-acento-oscuro);
+  --bs-btn-hover-border-color: var(--lf-acento-oscuro);
+  --bs-btn-active-color: var(--lf-carbon);
+  --bs-btn-active-bg: var(--lf-acento-oscuro);
+  --bs-btn-active-border-color: var(--lf-acento-oscuro);
   font-weight: 700;
 }
 
 .form-control:focus,
 .form-select:focus,
 .form-check-input:focus {
-  border-color: var(--tt-primario);
-  box-shadow: 0 0 0 0.2rem rgba(var(--tt-primario-rgb), 0.18);
+  border-color: var(--lf-primario);
+  box-shadow: 0 0 0 0.2rem rgba(var(--lf-primario-rgb), 0.18);
 }
 
 .form-check-input:checked {
-  background-color: var(--tt-primario);
-  border-color: var(--tt-primario);
+  background-color: var(--lf-primario);
+  border-color: var(--lf-primario);
 }
 
 .form-label {
@@ -99,10 +106,10 @@ a {
 
 /* Tarjetas */
 .tarjeta {
-  background: var(--tt-superficie);
-  border: 1px solid var(--tt-borde);
-  border-radius: var(--tt-radio);
-  box-shadow: var(--tt-sombra);
+  background: var(--lf-superficie);
+  border: 1px solid var(--lf-borde);
+  border-radius: var(--lf-radio);
+  box-shadow: var(--lf-sombra);
 }
 
 .tarjeta-hover {
@@ -111,11 +118,11 @@ a {
 
 .tarjeta-hover:hover {
   transform: translateY(-2px);
-  box-shadow: var(--tt-sombra-hover);
+  box-shadow: var(--lf-sombra-hover);
 }
 
 .texto-suave {
-  color: var(--tt-texto-suave);
+  color: var(--lf-texto-suave);
 }
 
 .encabezado-pagina {
@@ -123,7 +130,7 @@ a {
 }
 
 .encabezado-pagina p {
-  color: var(--tt-texto-suave);
+  color: var(--lf-texto-suave);
   margin-bottom: 0;
 }
 
@@ -134,8 +141,8 @@ a {
   gap: 0.35rem;
   padding: 0.2rem 0.65rem;
   border-radius: 999px;
-  background: var(--tt-primario-suave);
-  color: var(--tt-primario-oscuro);
+  background: var(--lf-primario-suave);
+  color: var(--lf-primario-oscuro);
   font-size: 0.8rem;
   font-weight: 700;
 }
@@ -147,15 +154,15 @@ a {
 }
 
 .badge-rol.rol-ADMIN {
-  background: var(--tt-acento);
+  background: var(--lf-primario);
 }
 
 .badge-rol.rol-MODERADOR {
-  background: var(--tt-primario);
+  background: var(--lf-carbon-claro);
 }
 
 .badge-rol.rol-USUARIO {
-  background: #8a9796;
+  background: #78716c;
 }
 
 /* Formularios de autenticación */
@@ -182,17 +189,17 @@ a {
 
 .contador-caracteres {
   font-size: 0.78rem;
-  color: var(--tt-texto-suave);
+  color: var(--lf-texto-suave);
 }
 
 /* Pestañas de los paneles */
 .nav-pills .nav-link {
-  color: var(--tt-texto-suave);
+  color: var(--lf-texto-suave);
   font-weight: 700;
 }
 
 .nav-pills .nav-link.active {
-  background: var(--tt-primario);
+  background: var(--lf-primario);
 }
 
 .table > :not(caption) > * > * {
@@ -210,7 +217,7 @@ a {
   gap: 0.4rem;
   font-size: 0.85rem;
   font-weight: 700;
-  color: var(--tt-texto-suave);
+  color: var(--lf-texto-suave);
 }
 
 .pasos li span {
@@ -220,15 +227,15 @@ a {
   width: 1.6rem;
   height: 1.6rem;
   border-radius: 50%;
-  background: var(--tt-borde);
+  background: var(--lf-borde);
 }
 
 .pasos li.activo {
-  color: var(--tt-primario);
+  color: var(--lf-primario);
 }
 
 .pasos li.activo span {
-  background: var(--tt-primario);
+  background: var(--lf-primario);
   color: #fff;
 }
 
@@ -238,9 +245,9 @@ a {
 }
 
 .mi-tema {
-  color: var(--tt-texto);
+  color: var(--lf-texto);
 }
 
 .mi-tema:hover .fw-bold {
-  color: var(--tt-primario);
+  color: var(--lf-primario);
 }

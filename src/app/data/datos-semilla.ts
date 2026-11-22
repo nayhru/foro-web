@@ -86,9 +86,9 @@ export const CATEGORIAS_SEMILLA: Categoria[] = [
 export const TEMAS_SEMILLA: Tema[] = [
   {
     id: 1,
-    titulo: 'Bienvenidos a Tertulia',
+    titulo: 'Bienvenidos a La Fogata',
     contenido:
-      'Este es el espacio de conversación de la comunidad estudiantil. Aquí puedes abrir temas, comentar y conocer gente de otras carreras. Antes de publicar, revisa las normas de convivencia que dejó la moderación. ¡Que lo disfruten!',
+      'Este es el lugar para juntarnos a conversar alrededor del fuego, como en una buena fogata. Aquí puedes abrir temas, comentar y conocer gente de otras carreras. Antes de publicar, revisa las normas de convivencia que dejó la moderación. ¡Que lo disfruten!',
     categoriaId: 6,
     autorId: 1,
     fechaCreacion: '2026-10-01T09:15:00',

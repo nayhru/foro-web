@@ -16,7 +16,7 @@ import { RouterLink } from '@angular/router';
   `,
   styles: `
     .icono {
-      color: var(--tt-primario);
+      color: var(--lf-primario);
     }
   `,
 })

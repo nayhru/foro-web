@@ -1,3 +1,3 @@
-# Tertulia · FrontEnd
+# La Fogata · FrontEnd
 
-FrontEnd en Angular del foro estudiantil Tertulia (Desarrollo Full Stack III, Sumativa 2).
+FrontEnd en Angular del foro estudiantil La Fogata (Desarrollo Full Stack III, Sumativa 2).

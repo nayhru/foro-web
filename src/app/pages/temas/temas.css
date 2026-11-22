@@ -1,9 +1,9 @@
 .portada {
   padding: 1.5rem;
   background:
-    radial-gradient(circle at 100% 0%, var(--tt-acento-suave) 0, transparent 45%),
-    radial-gradient(circle at 0% 100%, var(--tt-primario-suave) 0, transparent 50%),
-    var(--tt-superficie);
+    radial-gradient(circle at 100% 0%, var(--lf-acento-suave) 0, transparent 45%),
+    radial-gradient(circle at 0% 100%, var(--lf-primario-suave) 0, transparent 50%),
+    var(--lf-superficie);
 }
 
 @media (min-width: 768px) {
@@ -15,12 +15,12 @@
 .cifras strong {
   display: block;
   font-size: 1.5rem;
-  color: var(--tt-primario);
+  color: var(--lf-primario);
 }
 
 .cifras span {
   font-size: 0.8rem;
-  color: var(--tt-texto-suave);
+  color: var(--lf-texto-suave);
 }
 
 .categorias .list-group-item {
@@ -31,12 +31,12 @@
 }
 
 .categorias .list-group-item .badge {
-  background: var(--tt-fondo);
-  color: var(--tt-texto-suave);
+  background: var(--lf-fondo);
+  color: var(--lf-texto-suave);
 }
 
 .categorias .list-group-item.active {
-  background: var(--tt-primario);
+  background: var(--lf-primario);
   color: #fff;
 }
 
