@@ -1,0 +1,129 @@
+<div class="row justify-content-center">
+  <div class="col-12 col-md-8 col-lg-6 col-xl-5 panel-auth">
+    <div class="encabezado-pagina text-center">
+      <h1>Recuperar contraseña</h1>
+      <p>Te ayudamos a definir una contraseña nueva en dos pasos.</p>
+    </div>
+
+    <ol class="pasos list-unstyled d-flex justify-content-center gap-2 mb-4">
+      <li [class.activo]="paso() === 'correo'"><span>1</span>Correo</li>
+      <li [class.activo]="paso() === 'codigo'"><span>2</span>Nueva contraseña</li>
+      <li [class.activo]="paso() === 'listo'"><span>3</span>Listo</li>
+    </ol>
+
+    <div class="tarjeta">
+      @if (error()) {
+        <div class="alert alert-danger py-2" role="alert">
+          <i class="bi bi-exclamation-triangle me-1"></i>{{ error() }}
+        </div>
+      }
+
+      @switch (paso()) {
+        @case ('correo') {
+          <form [formGroup]="formCorreo" (ngSubmit)="solicitarCodigo()" novalidate>
+            <p class="texto-suave">
+              Escribe el correo con el que te registraste y te enviaremos un código de verificación.
+            </p>
+            <div class="mb-4">
+              <label for="email" class="form-label">Correo electrónico</label>
+              <input
+                id="email"
+                type="email"
+                class="form-control"
+                formControlName="email"
+                autocomplete="email"
+                placeholder="nombre@dominio.cl"
+                [class.is-invalid]="invalido(formCorreo.controls.email)"
+              />
+              <app-error-campo [control]="formCorreo.controls.email" />
+            </div>
+            <button type="submit" class="btn btn-primary w-100 py-2">
+              <i class="bi bi-envelope me-1"></i>Enviar código
+            </button>
+          </form>
+        }
+
+        @case ('codigo') {
+          <div class="alert alert-info d-flex gap-2" role="status">
+            <i class="bi bi-envelope-paper fs-4"></i>
+            <div>
+              Tu código de verificación es
+              <strong class="fs-5 codigo">{{ codigoSimulado() }}</strong>
+              <div class="small">En un sistema real este código llegaría a tu correo.</div>
+            </div>
+          </div>
+
+          <form [formGroup]="formClave" (ngSubmit)="cambiarClave()" novalidate>
+            <div class="mb-3">
+              <label for="codigo" class="form-label">Código de 6 dígitos</label>
+              <input
+                id="codigo"
+                class="form-control"
+                formControlName="codigo"
+                inputmode="numeric"
+                maxlength="6"
+                autocomplete="one-time-code"
+                [class.is-invalid]="invalido(formClave.controls.codigo)"
+              />
+              <app-error-campo [control]="formClave.controls.codigo" />
+            </div>
+
+            <div class="mb-3">
+              <label for="password" class="form-label">Nueva contraseña</label>
+              <input
+                id="password"
+                type="password"
+                class="form-control"
+                formControlName="password"
+                autocomplete="new-password"
+                [class.is-invalid]="invalido(formClave.controls.password)"
+              />
+              <app-error-campo [control]="formClave.controls.password" />
+              <app-reglas-password [valor]="formClave.controls.password.value" />
+            </div>
+
+            <div class="mb-4">
+              <label for="confirmar" class="form-label">Confirma la nueva contraseña</label>
+              <input
+                id="confirmar"
+                type="password"
+                class="form-control"
+                formControlName="confirmar"
+                autocomplete="new-password"
+                [class.is-invalid]="invalido(formClave.controls.confirmar) || noCoinciden"
+              />
+              <app-error-campo [control]="formClave.controls.confirmar" />
+              @if (noCoinciden) {
+                <div class="invalid-feedback d-block">
+                  <i class="bi bi-exclamation-circle me-1"></i>Las contraseñas no coinciden.
+                </div>
+              }
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row gap-2">
+              <button type="button" class="btn btn-light flex-fill" (click)="volverAlCorreo()">
+                Cambiar correo
+              </button>
+              <button type="submit" class="btn btn-primary flex-fill">
+                <i class="bi bi-key me-1"></i>Guardar contraseña
+              </button>
+            </div>
+          </form>
+        }
+
+        @case ('listo') {
+          <div class="text-center py-3">
+            <i class="bi bi-check-circle-fill display-4 text-success"></i>
+            <h2 class="h4 mt-3">¡Contraseña actualizada!</h2>
+            <p class="texto-suave">Ya puedes iniciar sesión con tu nueva contraseña.</p>
+            <a routerLink="/login" class="btn btn-primary">Ir a iniciar sesión</a>
+          </div>
+        }
+      }
+    </div>
+
+    <p class="text-center small mt-4">
+      ¿Te acordaste? <a routerLink="/login" class="fw-bold">Vuelve a iniciar sesión</a>
+    </p>
+  </div>
+</div>
