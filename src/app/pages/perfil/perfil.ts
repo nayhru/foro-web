@@ -18,6 +18,7 @@ const DESCRIPCION_PRIVILEGIO: Record<Privilegio, string> = {
   COMENTAR: 'Comentar en los temas',
   REPORTAR: 'Reportar contenido',
   EDITAR_PERFIL: 'Editar tu perfil',
+  ECHAR_LENA: 'Echarle leña a los temas que te gustan',
   EDITAR_CUALQUIER_CONTENIDO: 'Editar o eliminar contenido de otras personas',
   MODERAR: 'Banear contenido y revisar reportes',
   ADMINISTRAR: 'Gestionar usuarios y categorías',

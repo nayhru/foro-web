@@ -251,3 +251,8 @@ a {
 .mi-tema:hover .fw-bold {
   color: var(--lf-primario);
 }
+
+.lena-recibida i {
+  color: var(--lf-primario);
+  margin-right: 0.15rem;
+}

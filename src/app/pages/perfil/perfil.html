@@ -14,16 +14,22 @@
         <span class="badge badge-rol rol-{{ u.rol }}">{{ nombreRol[u.rol] }}</span>
 
         <div class="row mt-4 g-2">
-          <div class="col-6">
+          <div class="col-4">
             <div class="border rounded-3 py-2">
               <strong class="d-block fs-4">{{ misTemas().length }}</strong>
               <small class="texto-suave">temas</small>
             </div>
           </div>
-          <div class="col-6">
+          <div class="col-4">
             <div class="border rounded-3 py-2">
               <strong class="d-block fs-4">{{ foro.totalComentariosDe(u.id) }}</strong>
               <small class="texto-suave">comentarios</small>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="border rounded-3 py-2 lena-recibida" title="Leña que recibieron tus temas">
+              <strong class="d-block fs-4"><i class="bi bi-fire"></i>{{ foro.lenaRecibida(u.id) }}</strong>
+              <small class="texto-suave">de leña</small>
             </div>
           </div>
         </div>
@@ -152,7 +158,7 @@
           <a [routerLink]="['/temas', t.id]" class="d-flex flex-column flex-sm-row justify-content-between gap-1 py-2 border-bottom mi-tema">
             <span class="fw-bold">{{ t.titulo }}</span>
             <small class="texto-suave text-nowrap">
-              {{ t.categoria }} · {{ t.totalComentarios }} comentarios · {{ t.fechaCreacion | date: 'd MMM y' }}
+              {{ t.categoria }} · {{ t.totalComentarios }} comentarios · {{ t.totalLena }} de leña · {{ t.fechaCreacion | date: 'd MMM y' }}
             </small>
           </a>
         } @empty {

@@ -59,6 +59,21 @@
         }
       </div>
     </div>
+
+    <div class="tarjeta p-3 mt-3 encendidos">
+      <h2 class="h6 text-uppercase texto-suave mb-3"><i class="bi bi-fire me-1"></i>Más encendidos</h2>
+      @for (t of foro.masEncendidos(); track t.id; let i = $index) {
+        <a [routerLink]="['/temas', t.id]" class="d-flex gap-2 py-2 encendido">
+          <span class="puesto">{{ i + 1 }}</span>
+          <span class="min-w-0">
+            <span class="d-block fw-bold small text-truncate">{{ t.titulo }}</span>
+            <small class="texto-suave">{{ t.totalLena }} de leña · {{ t.nivel.nombre }}</small>
+          </span>
+        </a>
+      } @empty {
+        <p class="small texto-suave mb-0">Todavía no hay temas encendidos.</p>
+      }
+    </div>
   </aside>
 
   <div class="col-12 col-lg-9">
@@ -99,8 +114,30 @@
       </div>
     </form>
 
-    <div class="d-flex justify-content-between align-items-center mb-3 small texto-suave">
-      <span>Mostrando {{ temas().length }} de {{ foro.temasPublicos().length }} temas</span>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3 small texto-suave">
+      <div class="btn-group btn-group-sm" role="group" aria-label="Ordenar temas">
+        <button
+          type="button"
+          class="btn"
+          [class.btn-primary]="orden() === 'recientes'"
+          [class.btn-outline-primary]="orden() !== 'recientes'"
+          [attr.aria-pressed]="orden() === 'recientes'"
+          (click)="ordenar('recientes')"
+        >
+          <i class="bi bi-clock me-1"></i>Recientes
+        </button>
+        <button
+          type="button"
+          class="btn"
+          [class.btn-primary]="orden() === 'encendidos'"
+          [class.btn-outline-primary]="orden() !== 'encendidos'"
+          [attr.aria-pressed]="orden() === 'encendidos'"
+          (click)="ordenar('encendidos')"
+        >
+          <i class="bi bi-fire me-1"></i>Más encendidos
+        </button>
+      </div>
+      <span class="ms-sm-auto">Mostrando {{ temas().length }} de {{ foro.temasPublicos().length }} temas</span>
       @if (hayFiltros()) {
         <button type="button" class="btn btn-link btn-sm p-0" (click)="limpiar()">
           <i class="bi bi-x-circle me-1"></i>Limpiar filtros
