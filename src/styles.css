@@ -202,3 +202,37 @@ a {
 .toast {
   --bs-toast-max-width: 360px;
 }
+
+/* Pasos de la recuperación de contraseña */
+.pasos li {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--tt-texto-suave);
+}
+
+.pasos li span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  background: var(--tt-borde);
+}
+
+.pasos li.activo {
+  color: var(--tt-primario);
+}
+
+.pasos li.activo span {
+  background: var(--tt-primario);
+  color: #fff;
+}
+
+.codigo {
+  letter-spacing: 0.2em;
+  font-family: ui-monospace, Consolas, monospace;
+}
