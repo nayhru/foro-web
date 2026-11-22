@@ -236,3 +236,11 @@ a {
   letter-spacing: 0.2em;
   font-family: ui-monospace, Consolas, monospace;
 }
+
+.mi-tema {
+  color: var(--tt-texto);
+}
+
+.mi-tema:hover .fw-bold {
+  color: var(--tt-primario);
+}
