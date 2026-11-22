@@ -25,6 +25,26 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/tema-detalle/tema-detalle').then((m) => m.TemaDetalle),
   },
   {
+    path: 'perfil',
+    title: 'Mi perfil · Tertulia',
+    canActivate: [autenticadoGuard],
+    loadComponent: () => import('./pages/perfil/perfil').then((m) => m.Perfil),
+  },
+  {
+    path: 'moderacion',
+    title: 'Moderación · Tertulia',
+    canActivate: [rolGuard],
+    data: { roles: ['MODERADOR', 'ADMIN'] },
+    loadComponent: () => import('./pages/moderacion/moderacion').then((m) => m.Moderacion),
+  },
+  {
+    path: 'admin',
+    title: 'Administración · Tertulia',
+    canActivate: [rolGuard],
+    data: { roles: ['ADMIN'] },
+    loadComponent: () => import('./pages/admin/admin').then((m) => m.Admin),
+  },
+  {
     path: 'login',
     title: 'Iniciar sesión · Tertulia',
     canActivate: [invitadoGuard],
