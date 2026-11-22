@@ -15,13 +15,13 @@ import { Component, input } from '@angular/core';
   styles: `
     .vacio {
       padding: 3rem 1.5rem;
-      border: 2px dashed var(--tt-borde);
-      border-radius: var(--tt-radio);
-      background: var(--tt-superficie);
+      border: 2px dashed var(--lf-borde);
+      border-radius: var(--lf-radio);
+      background: var(--lf-superficie);
     }
     .vacio > i {
       font-size: 2.6rem;
-      color: var(--tt-acento);
+      color: var(--lf-acento-oscuro);
     }
   `,
 })

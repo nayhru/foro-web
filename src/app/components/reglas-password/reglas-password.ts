@@ -15,7 +15,7 @@ import { REGLAS_PASSWORD } from '../../validators/password.validators';
   `,
   styles: `
     .reglas li {
-      color: var(--tt-texto-suave);
+      color: var(--lf-texto-suave);
     }
     .reglas li.ok {
       color: #198754;

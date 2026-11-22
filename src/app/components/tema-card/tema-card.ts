@@ -31,10 +31,10 @@ import { Avatar } from '../avatar/avatar';
   `,
   styles: `
     .titulo {
-      color: var(--tt-texto);
+      color: var(--lf-texto);
     }
     .titulo:hover {
-      color: var(--tt-primario);
+      color: var(--lf-primario);
     }
     .extracto {
       display: -webkit-box;

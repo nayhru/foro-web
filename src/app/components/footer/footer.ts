@@ -13,7 +13,7 @@ import { Logo } from '../logo/logo';
         <div class="row g-3 align-items-center">
           <div class="col-12 col-md-6 col-lg-4 text-center text-md-start">
             <app-logo [tamano]="28" />
-            <p class="small texto-suave mb-0 mt-1">El foro de la comunidad estudiantil.</p>
+            <p class="small texto-suave mb-0 mt-1">Juntémonos a conversar alrededor del fuego.</p>
           </div>
           <div class="col-12 col-md-6 col-lg-4 text-center small">
             <a routerLink="/" class="me-3">Temas</a>
@@ -27,7 +27,7 @@ import { Logo } from '../logo/logo';
           </div>
         </div>
         <p class="text-center small texto-suave mb-0 mt-3">
-          Tertulia {{ anio }} · Desarrollo Full Stack III
+          La Fogata {{ anio }} · Desarrollo Full Stack III
         </p>
       </div>
     </footer>
@@ -43,8 +43,8 @@ import { Logo } from '../logo/logo';
   `,
   styles: `
     .pie {
-      background: var(--tt-superficie);
-      border-top: 1px solid var(--tt-borde);
+      background: var(--lf-superficie);
+      border-top: 1px solid var(--lf-borde);
     }
   `,
 })

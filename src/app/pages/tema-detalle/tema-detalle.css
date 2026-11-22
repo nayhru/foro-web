@@ -18,8 +18,8 @@
 }
 
 .relacionado {
-  color: var(--tt-texto);
-  border-bottom: 1px solid var(--tt-borde);
+  color: var(--lf-texto);
+  border-bottom: 1px solid var(--lf-borde);
 }
 
 .relacionado:last-child {
@@ -27,5 +27,5 @@
 }
 
 .relacionado:hover span {
-  color: var(--tt-primario);
+  color: var(--lf-primario);
 }

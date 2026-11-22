@@ -8,7 +8,7 @@ const errores = (valor: string, validadores = VALIDADORES_PASSWORD) =>
 
 describe('Validadores de contraseña', () => {
   it('acepta una contraseña que cumple todas las reglas', () => {
-    expect(errores('Tertulia2026*')).toEqual([]);
+    expect(errores('Fogata2026*')).toEqual([]);
   });
 
   it('exige largo entre 8 y 20', () => {
@@ -17,18 +17,18 @@ describe('Validadores de contraseña', () => {
   });
 
   it('exige mayúscula, minúscula, número y carácter especial', () => {
-    expect(errores('tertulia2026*')).toContain('mayusculaMinuscula');
-    expect(errores('Tertulia****')).toContain('numero');
-    expect(errores('Tertulia2026')).toContain('especial');
+    expect(errores('fogata2026*')).toContain('mayusculaMinuscula');
+    expect(errores('Fogata****')).toContain('numero');
+    expect(errores('Fogata2026')).toContain('especial');
   });
 
   it('detecta cuando la confirmación no coincide', () => {
     const grupo = new FormGroup(
-      { password: new FormControl('Tertulia2026*'), confirmar: new FormControl('Otra2026*') },
+      { password: new FormControl('Fogata2026*'), confirmar: new FormControl('Otra2026*') },
       { validators: coincidenValidator('password', 'confirmar') },
     );
     expect(grupo.hasError('noCoinciden')).toBe(true);
-    grupo.controls.confirmar.setValue('Tertulia2026*');
+    grupo.controls.confirmar.setValue('Fogata2026*');
     expect(grupo.hasError('noCoinciden')).toBe(false);
   });
 });
