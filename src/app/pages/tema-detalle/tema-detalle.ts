@@ -3,10 +3,12 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { Avatar } from '../../components/avatar/avatar';
+import { BotonLena } from '../../components/boton-lena/boton-lena';
 import { DialogoConfirmacion } from '../../components/dialogo-confirmacion/dialogo-confirmacion';
 import { DialogoMotivo } from '../../components/dialogo-motivo/dialogo-motivo';
 import { ErrorCampo } from '../../components/error-campo/error-campo';
 import { EstadoVacio } from '../../components/estado-vacio/estado-vacio';
+import { NivelFuegoBadge } from '../../components/nivel-fuego/nivel-fuego';
 import { ForoFacade } from '../../facades/foro.facade';
 import { ComentarioVista, NOMBRE_ROL, TipoContenido } from '../../models';
 import { campoInvalido } from '../../validators/mensajes-error';
@@ -30,6 +32,8 @@ const validadoresComentario = [Validators.required, noSoloEspacios, largoTexto(3
     EstadoVacio,
     DialogoConfirmacion,
     DialogoMotivo,
+    BotonLena,
+    NivelFuegoBadge,
   ],
   templateUrl: './tema-detalle.html',
   styleUrl: './tema-detalle.css',

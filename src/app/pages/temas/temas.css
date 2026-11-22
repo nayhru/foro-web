@@ -45,9 +45,34 @@
   color: #fff;
 }
 
-@media (min-width: 992px) {
-  .categorias {
-    position: sticky;
-    top: 5.5rem;
-  }
+
+.encendido {
+  color: var(--lf-texto);
+  border-bottom: 1px solid var(--lf-borde);
+}
+
+.encendido:last-child {
+  border-bottom: 0;
+}
+
+.encendido:hover .fw-bold {
+  color: var(--lf-primario);
+}
+
+.puesto {
+  flex-shrink: 0;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--lf-acento-suave);
+  color: #92400e;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.min-w-0 {
+  min-width: 0;
 }

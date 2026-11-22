@@ -24,7 +24,10 @@
       }
 
       <article class="tarjeta p-3 p-md-4 mb-4">
-        <span class="etiqueta-categoria mb-3"><i class="bi {{ t.categoriaIcono }}"></i>{{ t.categoria }}</span>
+        <div class="d-flex flex-wrap gap-2 align-items-center mb-3">
+          <span class="etiqueta-categoria"><i class="bi {{ t.categoriaIcono }}"></i>{{ t.categoria }}</span>
+          <app-nivel-fuego [nivel]="t.nivel" />
+        </div>
         <h1 class="h2 mb-3">{{ t.titulo }}</h1>
 
         <div class="d-flex align-items-center gap-2 mb-4 small">
@@ -41,6 +44,13 @@
         </div>
 
         <p class="texto-largo mb-4">{{ t.contenido }}</p>
+
+        <div class="d-flex flex-wrap align-items-center gap-2 mb-3">
+          <app-boton-lena [tema]="t" />
+          <small class="texto-suave">
+            {{ t.totalLena === 1 ? '1 persona le echó leña' : t.totalLena + ' personas le echaron leña' }}
+          </small>
+        </div>
 
         @if (foro.estaAutenticado()) {
           <div class="d-flex flex-wrap gap-2 border-top pt-3">
