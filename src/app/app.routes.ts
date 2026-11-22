@@ -8,6 +8,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/temas/temas').then((m) => m.Temas),
   },
   {
+    path: 'temas/:id',
+    title: 'Tema · Tertulia',
+    loadComponent: () => import('./pages/tema-detalle/tema-detalle').then((m) => m.TemaDetalle),
+  },
+  {
     path: 'login',
     title: 'Iniciar sesión · Tertulia',
     canActivate: [invitadoGuard],
