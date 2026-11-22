@@ -4,6 +4,7 @@ import {
   Categoria,
   Comentario,
   ComentarioVista,
+  NOMBRE_ROL,
   Privilegio,
   ReporteVista,
   Resultado,
@@ -427,7 +428,7 @@ export class ForoFacade {
 
     const usuario = this.usuarioService.actualizar(usuarioId, { rol });
     return usuario
-      ? this.exito(`${usuario.username} ahora tiene el rol ${rol}.`)
+      ? this.exito(`${usuario.username} ahora tiene el rol ${NOMBRE_ROL[rol]}.`)
       : this.error('El usuario no existe.');
   }
 
