@@ -1,6 +1,7 @@
 export * from './rol';
 export * from './usuario';
 export * from './categoria';
+export * from './fuego';
 export * from './tema';
 export * from './comentario';
 export * from './reporte';

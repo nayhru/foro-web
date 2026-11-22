@@ -5,11 +5,12 @@ export type Privilegio =
   | 'COMENTAR'
   | 'REPORTAR'
   | 'EDITAR_PERFIL'
+  | 'ECHAR_LENA'
   | 'EDITAR_CUALQUIER_CONTENIDO'
   | 'MODERAR'
   | 'ADMINISTRAR';
 
-const BASE: Privilegio[] = ['PUBLICAR', 'COMENTAR', 'REPORTAR', 'EDITAR_PERFIL'];
+const BASE: Privilegio[] = ['PUBLICAR', 'COMENTAR', 'REPORTAR', 'EDITAR_PERFIL', 'ECHAR_LENA'];
 
 // Cada rol hereda lo del anterior y suma lo suyo
 export const PRIVILEGIOS_POR_ROL: Record<Rol, Privilegio[]> = {

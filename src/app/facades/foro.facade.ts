@@ -5,6 +5,7 @@ import {
   Comentario,
   ComentarioVista,
   NOMBRE_ROL,
+  nivelDeFuego,
   Privilegio,
   ReporteVista,
   Resultado,
@@ -23,10 +24,13 @@ import { SesionService } from '../services/sesion.service';
 import { TemaService } from '../services/tema.service';
 import { UsuarioService } from '../services/usuario.service';
 
+export type OrdenTemas = 'recientes' | 'encendidos';
+
 export interface FiltroTemas {
   texto: string;
   categoriaId: number | null;
   autorId: number | null;
+  orden?: OrdenTemas;
 }
 
 export interface DatosRegistro {
@@ -107,6 +111,10 @@ export class ForoFacade {
   );
   readonly comentariosBaneados = computed(() => this.vistasComentarios().filter((c) => c.baneado));
 
+  readonly masEncendidos = computed(() =>
+    [...this.temasPublicos()].sort(this.porLena).slice(0, 3),
+  );
+
   readonly autores = computed(() => {
     const ids = new Set(this.temasPublicos().map((t) => t.autorId));
     return this.usuarios().filter((u) => ids.has(u.id));
@@ -157,12 +165,23 @@ export class ForoFacade {
   // ---- Consultas ----
   filtrarTemas(filtro: FiltroTemas): TemaVista[] {
     const texto = this.normalizar(filtro.texto);
-    return this.temasPublicos().filter(
+    const temas = this.temasPublicos().filter(
       (t) =>
         (!texto || this.normalizar(`${t.titulo} ${t.contenido}`).includes(texto)) &&
         (filtro.categoriaId === null || t.categoriaId === filtro.categoriaId) &&
         (filtro.autorId === null || t.autorId === filtro.autorId),
     );
+    // temasPublicos ya viene ordenado por fecha
+    return filtro.orden === 'encendidos' ? temas.sort(this.porLena) : temas;
+  }
+
+  echeLena(tema: Tema): boolean {
+    const yo = this.usuarioActual();
+    return !!yo && (tema.lena ?? []).includes(yo.id);
+  }
+
+  lenaRecibida(usuarioId: number): number {
+    return this.temasDe(usuarioId).reduce((total, t) => total + t.totalLena, 0);
   }
 
   temaPorId(id: number): TemaVista | undefined {
@@ -297,6 +316,7 @@ export class ForoFacade {
       autorId: yo.id,
       fechaCreacion: new Date().toISOString(),
       baneado: false,
+      lena: [],
     });
     return this.exito('Tu tema ya está publicado.', tema);
   }
@@ -328,6 +348,16 @@ export class ForoFacade {
     this.comentarioService.eliminarDeTema(id);
     this.temaService.eliminar(id);
     return this.exito('El tema se eliminó.');
+  }
+
+  // ---- Leña (el "me gusta" del foro) ----
+  echarLena(temaId: number): Resultado {
+    const yo = this.usuarioActual();
+    if (!yo || !this.puede('ECHAR_LENA')) return this.sinPermiso();
+    if (!this.temaVisible(temaId)) return this.error('Este tema ya no está disponible.');
+
+    const echada = this.temaService.alternarLena(temaId, yo.id);
+    return this.exito(echada ? '¡Le echaste leña al tema!' : 'Quitaste tu leña de este tema.');
   }
 
   // ---- Comentarios ----
@@ -496,7 +526,13 @@ export class ForoFacade {
       categoriaIcono: categoria?.icono ?? 'bi-chat-square-text',
       totalComentarios: this.listaComentarios().filter((c) => c.temaId === tema.id && !c.baneado)
         .length,
+      totalLena: (tema.lena ?? []).length,
+      nivel: nivelDeFuego((tema.lena ?? []).length),
     };
+  }
+
+  private porLena(a: TemaVista, b: TemaVista): number {
+    return b.totalLena - a.totalLena || b.fechaCreacion.localeCompare(a.fechaCreacion);
   }
 
   private usuario(id: number): Usuario | undefined {
