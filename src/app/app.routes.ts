@@ -3,6 +3,11 @@ import { invitadoGuard } from './guards/auth.guards';
 
 export const routes: Routes = [
   {
+    path: '',
+    title: 'Temas · Tertulia',
+    loadComponent: () => import('./pages/temas/temas').then((m) => m.Temas),
+  },
+  {
     path: 'login',
     title: 'Iniciar sesión · Tertulia',
     canActivate: [invitadoGuard],
